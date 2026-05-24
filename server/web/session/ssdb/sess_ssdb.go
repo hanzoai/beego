@@ -11,7 +11,7 @@ import (
 
 	"github.com/ssdb/gossdb/ssdb"
 
-	"github.com/beego/beego/v2/server/web/session"
+	"github.com/hanzoai/beego/v2/server/web/session"
 )
 
 var ssdbProvider = &Provider{}

@@ -29,9 +29,9 @@ import (
 
 	"github.com/luxfi/metric"
 
-	"github.com/beego/beego/v2"
-	"github.com/beego/beego/v2/server/web"
-	"github.com/beego/beego/v2/server/web/context"
+	"github.com/hanzoai/beego/v2"
+	"github.com/hanzoai/beego/v2/server/web"
+	"github.com/hanzoai/beego/v2/server/web/context"
 )
 
 const unknownRouterPattern = "UnknownRouterPattern"

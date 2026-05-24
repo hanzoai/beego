@@ -19,10 +19,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm/internal/models"
+	"github.com/hanzoai/beego/v2/client/orm/internal/models"
 
-	"github.com/beego/beego/v2/client/orm/clauses"
-	"github.com/beego/beego/v2/client/orm/clauses/order_clause"
+	"github.com/hanzoai/beego/v2/client/orm/clauses"
+	"github.com/hanzoai/beego/v2/client/orm/clauses/order_clause"
 )
 
 // table info struct.

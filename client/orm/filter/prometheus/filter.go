@@ -23,7 +23,7 @@ import (
 
 	"github.com/luxfi/metric"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/hanzoai/beego/v2/client/orm"
 )
 
 // FilterChainBuilder is an extension point,

@@ -18,7 +18,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/beego/beego/v2/core/utils"
+	"github.com/hanzoai/beego/v2/core/utils"
 	"io"
 	"net/http"
 	"os"

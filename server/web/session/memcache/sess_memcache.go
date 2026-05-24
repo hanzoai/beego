@@ -21,8 +21,8 @@
 // Usage:
 // import(
 //
-//	_ "github.com/beego/beego/v2/server/web/session/memcache"
-//	"github.com/beego/beego/v2/server/web/session"
+//	_ "github.com/hanzoai/beego/v2/server/web/session/memcache"
+//	"github.com/hanzoai/beego/v2/server/web/session"
 //
 // )
 //
@@ -40,7 +40,7 @@ import (
 
 	"github.com/bradfitz/gomemcache/memcache"
 
-	"github.com/beego/beego/v2/server/web/session"
+	"github.com/hanzoai/beego/v2/server/web/session"
 )
 
 var (

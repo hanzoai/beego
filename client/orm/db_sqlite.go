@@ -22,9 +22,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm/internal/models"
+	"github.com/hanzoai/beego/v2/client/orm/internal/models"
 
-	"github.com/beego/beego/v2/client/orm/hints"
+	"github.com/hanzoai/beego/v2/client/orm/hints"
 )
 
 // sqlite operators.

@@ -19,7 +19,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/beego/beego/v2/core/berror"
+	"github.com/hanzoai/beego/v2/core/berror"
 )
 
 type BloomFilterCache struct {

@@ -24,7 +24,7 @@ import (
 
 	"github.com/luxfi/metric"
 
-	"github.com/beego/beego/v2/core/admin"
+	"github.com/hanzoai/beego/v2/core/admin"
 )
 
 type adminController struct {

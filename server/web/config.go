@@ -24,12 +24,12 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/beego/beego/v2"
-	"github.com/beego/beego/v2/core/config"
-	"github.com/beego/beego/v2/core/logs"
-	"github.com/beego/beego/v2/core/utils"
-	"github.com/beego/beego/v2/server/web/context"
-	"github.com/beego/beego/v2/server/web/session"
+	"github.com/hanzoai/beego/v2"
+	"github.com/hanzoai/beego/v2/core/config"
+	"github.com/hanzoai/beego/v2/core/logs"
+	"github.com/hanzoai/beego/v2/core/utils"
+	"github.com/hanzoai/beego/v2/server/web/context"
+	"github.com/hanzoai/beego/v2/server/web/session"
 )
 
 // Config is the main struct for BConfig

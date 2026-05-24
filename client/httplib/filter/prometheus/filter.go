@@ -23,7 +23,7 @@ import (
 
 	"github.com/luxfi/metric"
 
-	"github.com/beego/beego/v2/client/httplib"
+	"github.com/hanzoai/beego/v2/client/httplib"
 )
 
 type FilterChainBuilder struct {

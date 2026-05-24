@@ -15,12 +15,12 @@
 package toml
 
 import (
-	"github.com/beego/beego/v2/core/utils"
+	"github.com/hanzoai/beego/v2/core/utils"
 	"github.com/pelletier/go-toml"
 	"os"
 	"strings"
 
-	"github.com/beego/beego/v2/core/config"
+	"github.com/hanzoai/beego/v2/core/config"
 )
 
 const keySeparator = "."
