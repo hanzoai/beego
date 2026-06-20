@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   changelog:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: "!contains(github.event.pull_request.labels.*.name, 'Skip Changelog')"
 
     steps:
