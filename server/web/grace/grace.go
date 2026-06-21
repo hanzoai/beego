@@ -92,8 +92,19 @@ var (
 )
 
 func init() {
-	flag.BoolVar(&isChild, "graceful", false, "listen on open fd (after forking)")
-	flag.StringVar(&socketOrder, "socketorder", "", "previous initialization order - used when more than one listener was started")
+	// Register on the global flag set only if not already defined. The unified
+	// Hanzo cloud binary composes subsystems that may each pull a beego grace
+	// package (e.g. legacy beego v1 alongside this v2 fork); both register the
+	// same "graceful"/"socketorder" flags in init(). Defining a flag twice on
+	// flag.CommandLine panics ("flag redefined"), so guard each registration —
+	// whichever package's init() runs first wins, the rest bind to the existing
+	// flag value. One process, one flag set, no panic.
+	if flag.Lookup("graceful") == nil {
+		flag.BoolVar(&isChild, "graceful", false, "listen on open fd (after forking)")
+	}
+	if flag.Lookup("socketorder") == nil {
+		flag.StringVar(&socketOrder, "socketorder", "", "previous initialization order - used when more than one listener was started")
+	}
 
 	regLock = &sync.Mutex{}
 	runningServers = make(map[string]*Server)
