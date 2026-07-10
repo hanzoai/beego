@@ -518,7 +518,13 @@ func init() {
 
 	err := InitGlobalInstance("ini", "conf/app.conf")
 	if err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, "init global config instance failed. If you do not use this, just ignore it. ", err)
+		// A missing default conf/app.conf is the normal case for binaries that
+		// configure via env/flags (control CLIs, embedded servers) rather than a
+		// Beego app.conf — so its absence is silent. Only a PRESENT-but-broken
+		// file (parse/permission error) warrants the diagnostic below.
+		if _, statErr := os.Stat("conf/app.conf"); statErr == nil {
+			_, _ = fmt.Fprintln(os.Stderr, "init global config instance failed. If you do not use this, just ignore it. ", err)
+		}
 	}
 }
 
