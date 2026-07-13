@@ -19,7 +19,7 @@ import (
 	"os"
 	"path/filepath"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/hanzoai/csqlite"
 
 	"github.com/hanzoai/beego/v2/client/orm"
 )
