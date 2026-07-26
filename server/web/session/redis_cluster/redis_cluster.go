@@ -41,7 +41,7 @@ import (
 	"sync"
 	"time"
 
-	rediss "github.com/redis/go-redis/v9"
+	rediss "github.com/hanzokv/go/v9"
 
 	"github.com/hanzoai/beego/v2/server/web/session"
 )
