@@ -10,7 +10,7 @@ and `database/sql/driver`.
 
 ## What providers are supported?
 
-As of now this session manager support memory, file, Redis and MySQL.
+As of now this session manager support memory, file, KV and MySQL.
 
 ## How to use it?
 
@@ -38,10 +38,10 @@ Then in you web app init the global session manager
   		go globalSessions.GC()
   	}
 
-* Use **Redis** as provider, the last param is the Redis conn address,poolsize,password:
+* Use **KV** as provider, the last param is the KV conn address,poolsize,password:
 
   	func init() {
-  		globalSessions, _ = session.NewManager("redis", `{"cookieName":"gosessionid","gclifetime":3600,"ProviderConfig":"127.0.0.1:6379,100,astaxie"}`)
+  		globalSessions, _ = session.NewManager("kv", `{"cookieName":"gosessionid","gclifetime":3600,"ProviderConfig":"127.0.0.1:6379,100,astaxie"}`)
   		go globalSessions.GC()
   	}
 

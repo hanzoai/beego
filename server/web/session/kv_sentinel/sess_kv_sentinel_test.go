@@ -1,11 +1,9 @@
-package redis
+package kv_sentinel
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -15,20 +13,21 @@ import (
 	"github.com/hanzoai/beego/v2/server/web/session"
 )
 
-func TestRedis(t *testing.T) {
-	globalSession, err := setupSessionManager(t)
+func TestKVSentinel(t *testing.T) {
+	globalSessions, err := setupSessionManager(t)
 	if err != nil {
-		t.Fatal(err)
+		t.Log(err)
+		return
 	}
-
-	go globalSession.GC()
+	// todo test if e==nil
+	go globalSessions.GC()
 
 	ctx := context.Background()
 
 	r, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
 
-	sess, err := globalSession.SessionStart(w, r)
+	sess, err := globalSessions.SessionStart(w, r)
 	if err != nil {
 		t.Fatal("session start failed:", err)
 	}
@@ -99,9 +98,10 @@ func TestProvider_SessionInit(t *testing.T) {
 }
 
 func TestStoreSessionReleaseIfPresentAndSessionDestroy(t *testing.T) {
-	globalSessions, err := setupSessionManager(t)
-	if err != nil {
-		t.Fatal(err)
+	globalSessions, e := setupSessionManager(t)
+	if e != nil {
+		t.Log(e)
+		return
 	}
 	// todo test if e==nil
 	go globalSessions.GC()
@@ -124,7 +124,7 @@ func TestStoreSessionReleaseIfPresentAndSessionDestroy(t *testing.T) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		sess.SessionReleaseIfPresent(ctx, httptest.NewRecorder())
+		sess.SessionReleaseIfPresent(context.Background(), httptest.NewRecorder())
 	}()
 	wg.Wait()
 	exist, err := globalSessions.GetProvider().SessionExist(ctx, sess.SessionID(ctx))
@@ -137,12 +137,6 @@ func TestStoreSessionReleaseIfPresentAndSessionDestroy(t *testing.T) {
 }
 
 func setupSessionManager(t *testing.T) (*session.Manager, error) {
-	redisAddr := os.Getenv("REDIS_ADDR")
-	if redisAddr == "" {
-		redisAddr = "127.0.0.1:6379"
-	}
-	redisConfig := fmt.Sprintf("%s,100,,0,30", redisAddr)
-
 	sessionConfig := session.NewManagerConfig(
 		session.CfgCookieName(`gosessionid`),
 		session.CfgSetCookie(true),
@@ -150,11 +144,11 @@ func setupSessionManager(t *testing.T) (*session.Manager, error) {
 		session.CfgMaxLifeTime(3600),
 		session.CfgSecure(false),
 		session.CfgCookieLifeTime(3600),
-		session.CfgProviderConfig(redisConfig),
+		session.CfgProviderConfig("127.0.0.1:6379,100,,0,master"),
 	)
-	globalSessions, err := session.NewManager("redis", sessionConfig)
+	globalSessions, err := session.NewManager("kv_sentinel", sessionConfig)
 	if err != nil {
-		t.Log("could not create manager: ", err)
+		t.Log(err)
 		return nil, err
 	}
 	return globalSessions, nil

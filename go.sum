@@ -90,6 +90,8 @@ github.com/hanzoai/csqlite v0.1.0 h1:suwC3dh0INlfP/U0Es6cDf6JNQ+2+GVLLATPWCUux6k
 github.com/hanzoai/csqlite v0.1.0/go.mod h1:H31a/O6VXuklR9UBkgY++bmAK5uzVfXPqU0F6P9Wsos=
 github.com/hanzokv/go/v9 v9.21.1 h1:MUIAJTV1pI4pkKWSzrgJRzKA7W3aHUJ1WO0mtZRhhPc=
 github.com/hanzokv/go/v9 v9.21.1/go.mod h1:GV+nw+jX60sIrJ7LBkmOQw2WASXzkMstt52blcwNw6w=
+github.com/hanzokv/go/v9 v9.22.0 h1:zD4fh0NLBuVa8njIrXUivJCijlratzS1Yf7Y/uD5T00=
+github.com/hanzokv/go/v9 v9.22.0/go.mod h1:GV+nw+jX60sIrJ7LBkmOQw2WASXzkMstt52blcwNw6w=
 github.com/hashicorp/golang-lru v1.0.2 h1:dV3g9Z/unq5DpblPpw+Oqcv4dU/1omnb4Ok8iPY6p1c=
 github.com/hashicorp/golang-lru v1.0.2/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
 github.com/hpcloud/tail v1.0.0 h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=

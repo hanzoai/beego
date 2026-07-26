@@ -17,7 +17,7 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/uuid v1.6.0
-	github.com/hanzokv/go/v9 v9.21.1
+	github.com/hanzokv/go/v9 v9.22.0
 	github.com/hashicorp/golang-lru v1.0.2
 	github.com/ledisdb/ledisdb v0.0.0-20200510135210-d35789ec47e6
 	github.com/lib/pq v1.12.3

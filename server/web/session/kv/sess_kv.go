@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package redis for session provider
+// Package kv for session provider
 //
-// depend on github.com/gomodule/redigo/redis
+// depend on github.com/hanzokv/go/v9
 //
-// go install github.com/gomodule/redigo/redis
+// go install github.com/hanzokv/go/v9
 //
 // Usage:
 // import(
 //
-//	_ "github.com/hanzoai/beego/v2/server/web/session/redis"
+//	_ "github.com/hanzoai/beego/v2/server/web/session/kv"
 //	"github.com/hanzoai/beego/v2/server/web/session"
 //
 // )
 //
 //	func init() {
-//		globalSessions, _ = session.NewManager("redis", ``{"cookieName":"gosessionid","gclifetime":3600,"ProviderConfig":"127.0.0.1:7070"}``)
+//		globalSessions, _ = session.NewManager("kv", ``{"cookieName":"gosessionid","gclifetime":3600,"ProviderConfig":"127.0.0.1:7070"}``)
 //		go globalSessions.GC()
 //	}
-package redis
+package kv
 
 import (
 	"context"
@@ -46,21 +46,21 @@ import (
 	"github.com/hanzoai/beego/v2/server/web/session"
 )
 
-var redispder = &Provider{}
+var kvpder = &Provider{}
 
-// MaxPoolSize redis max pool size
+// MaxPoolSize KV max pool size
 var MaxPoolSize = 100
 
-// SessionStore redis session store
+// SessionStore KV session store
 type SessionStore struct {
-	p           *redis.Client
+	p           *kv.Client
 	sid         string
 	lock        sync.RWMutex
 	values      map[interface{}]interface{}
 	maxlifetime int64
 }
 
-// Set value in redis session
+// Set value in KV session
 func (rs *SessionStore) Set(ctx context.Context, key, value interface{}) error {
 	rs.lock.Lock()
 	defer rs.lock.Unlock()
@@ -68,7 +68,7 @@ func (rs *SessionStore) Set(ctx context.Context, key, value interface{}) error {
 	return nil
 }
 
-// Get value in redis session
+// Get value in KV session
 func (rs *SessionStore) Get(ctx context.Context, key interface{}) interface{} {
 	rs.lock.RLock()
 	defer rs.lock.RUnlock()
@@ -78,7 +78,7 @@ func (rs *SessionStore) Get(ctx context.Context, key interface{}) interface{} {
 	return nil
 }
 
-// Delete value in redis session
+// Delete value in KV session
 func (rs *SessionStore) Delete(ctx context.Context, key interface{}) error {
 	rs.lock.Lock()
 	defer rs.lock.Unlock()
@@ -86,7 +86,7 @@ func (rs *SessionStore) Delete(ctx context.Context, key interface{}) error {
 	return nil
 }
 
-// Flush clear all values in redis session
+// Flush clear all values in KV session
 func (rs *SessionStore) Flush(context.Context) error {
 	rs.lock.Lock()
 	defer rs.lock.Unlock()
@@ -94,17 +94,17 @@ func (rs *SessionStore) Flush(context.Context) error {
 	return nil
 }
 
-// SessionID get redis session id
+// SessionID get KV session id
 func (rs *SessionStore) SessionID(context.Context) string {
 	return rs.sid
 }
 
-// SessionRelease save session values to redis
+// SessionRelease save session values to the KV store
 func (rs *SessionStore) SessionRelease(ctx context.Context, w http.ResponseWriter) {
 	rs.releaseSession(ctx, w, false)
 }
 
-// SessionReleaseIfPresent save session values to redis when key is present
+// SessionReleaseIfPresent save session values to the KV store when key is present
 func (rs *SessionStore) SessionReleaseIfPresent(ctx context.Context, w http.ResponseWriter) {
 	rs.releaseSession(ctx, w, true)
 }
@@ -125,7 +125,7 @@ func (rs *SessionStore) releaseSession(ctx context.Context, _ http.ResponseWrite
 	}
 }
 
-// Provider redis session provider
+// Provider KV session provider
 type Provider struct {
 	maxlifetime int64
 	SavePath    string `json:"save_path"`
@@ -139,11 +139,11 @@ type Provider struct {
 	idleCheckFrequency    time.Duration
 	IdleCheckFrequencyStr string `json:"idle_check_frequency"`
 	MaxRetries            int    `json:"max_retries"`
-	poollist              *redis.Client
+	poollist              *kv.Client
 }
 
-// SessionInit init redis session
-// savepath like redis server addr,pool size,password,dbnum,IdleTimeout second
+// SessionInit init KV session
+// savepath like KV server addr,pool size,password,dbnum,IdleTimeout second
 // v1.x e.g. 127.0.0.1:6379,100,astaxie,0,30
 // v2.0 you should pass json string
 func (rp *Provider) SessionInit(ctx context.Context, maxlifetime int64, cfgStr string) error {
@@ -170,7 +170,7 @@ func (rp *Provider) SessionInit(ctx context.Context, maxlifetime int64, cfgStr s
 		rp.initOldStyle(cfgStr)
 	}
 
-	rp.poollist = redis.NewClient(&redis.Options{
+	rp.poollist = kv.NewClient(&kv.Options{
 		Addr:            rp.SavePath,
 		Password:        rp.Password,
 		PoolSize:        rp.Poolsize,
@@ -230,27 +230,27 @@ func (rp *Provider) initOldStyle(savePath string) {
 	}
 }
 
-// SessionRead read redis session by sid
+// SessionRead read KV session by sid
 func (rp *Provider) SessionRead(ctx context.Context, sid string) (session.Store, error) {
-	var kv map[interface{}]interface{}
+	var values map[interface{}]interface{}
 
 	kvs, err := rp.poollist.Get(ctx, sid).Result()
-	if err != nil && err != redis.Nil {
+	if err != nil && err != kv.Nil {
 		return nil, err
 	}
 	if len(kvs) == 0 {
-		kv = make(map[interface{}]interface{})
+		values = make(map[interface{}]interface{})
 	} else {
-		if kv, err = session.DecodeGob([]byte(kvs)); err != nil {
+		if values, err = session.DecodeGob([]byte(kvs)); err != nil {
 			return nil, err
 		}
 	}
 
-	rs := &SessionStore{p: rp.poollist, sid: sid, values: kv, maxlifetime: rp.maxlifetime}
+	rs := &SessionStore{p: rp.poollist, sid: sid, values: values, maxlifetime: rp.maxlifetime}
 	return rs, nil
 }
 
-// SessionExist check redis session exist by sid
+// SessionExist check KV session exist by sid
 func (rp *Provider) SessionExist(ctx context.Context, sid string) (bool, error) {
 	c := rp.poollist
 
@@ -260,7 +260,7 @@ func (rp *Provider) SessionExist(ctx context.Context, sid string) (bool, error) 
 	return true, nil
 }
 
-// SessionRegenerate generate new sid for redis session
+// SessionRegenerate generate new sid for KV session
 func (rp *Provider) SessionRegenerate(ctx context.Context, oldsid, sid string) (session.Store, error) {
 	c := rp.poollist
 	if existed, _ := c.Exists(ctx, oldsid).Result(); existed == 0 {
@@ -275,7 +275,7 @@ func (rp *Provider) SessionRegenerate(ctx context.Context, oldsid, sid string) (
 	return rp.SessionRead(ctx, sid)
 }
 
-// SessionDestroy delete redis session by id
+// SessionDestroy delete KV session by id
 func (rp *Provider) SessionDestroy(ctx context.Context, sid string) error {
 	c := rp.poollist
 
@@ -293,5 +293,5 @@ func (rp *Provider) SessionAll(context.Context) int {
 }
 
 func init() {
-	session.Register("redis", redispder)
+	session.Register("kv", kvpder)
 }

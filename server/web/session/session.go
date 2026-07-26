@@ -99,7 +99,7 @@ type Manager struct {
 // 1. cookie
 // 2. file
 // 3. memory
-// 4. redis
+// 4. kv
 // 5. mysql
 // json config:
 // 1. is https  default false
