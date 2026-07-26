@@ -15,7 +15,6 @@ require (
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/gogo/protobuf v1.3.2
-	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/hanzokv/go/v9 v9.22.0
 	github.com/hashicorp/golang-lru v1.0.2
@@ -88,5 +87,3 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20260226221140-a57be14db171 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260226221140-a57be14db171 // indirect
 )
-
-replace github.com/gomodule/redigo => github.com/gomodule/redigo v1.8.8
