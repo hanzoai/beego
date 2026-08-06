@@ -1,0 +1,7 @@
+# Build gate only, deliberately. beego's suite needs live MySQL, Redis, memcache,
+# SSDB and etcd — ./core/config/etcd alone panics on a refused dial — and `go vet
+# ./...` is red on pre-existing non-constant-format-string findings in
+# server/web/*_test.go. `go build ./...` is the part that is honest unattended.
+test:
+  - name: build
+    run: go build ./...
